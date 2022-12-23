@@ -1,11 +1,17 @@
+import css from "./ImageGalleryItem.module.css";
+
 export function ImageGalleryItem(props: {
   src: string;
   largeImg: string;
   alt: string;
 }) {
   return (
-    <li className="gallery-item">
-      <img src={props.src} alt={props.alt} />
+    <li className={css.ImageGalleryItem}>
+      <img
+        src={props.src}
+        alt={props.alt}
+        className={css["ImageGalleryItem-image"]}
+      />
     </li>
   );
 }
