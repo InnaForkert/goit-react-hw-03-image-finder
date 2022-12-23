@@ -1,17 +1,19 @@
+import css from "./Searchbar.module.css";
+
 interface SearchbarProps {
   handleSubmit: React.FormEventHandler<HTMLFormElement>;
 }
 
 export function Searchbar(props: SearchbarProps) {
   return (
-    <header className="searchbar">
-      <form className="form" onSubmit={props.handleSubmit}>
-        <button type="submit" className="button">
-          <span className="button-label">Search</span>
+    <header className={css.Searchbar}>
+      <form className={css.SearchForm} onSubmit={props.handleSubmit}>
+        <button type="submit" className={css["SearchForm-button"]}>
+          <span className={css["SearchForm-button-label"]}>Search</span>
         </button>
         <input
           name="query"
-          className="input"
+          className={css["SearchForm-input"]}
           type="text"
           autoComplete="off"
           autoFocus
