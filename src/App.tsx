@@ -20,6 +20,7 @@ class App extends React.Component<{}, AppInterface> {
       fetching: false,
       showModal: false,
       currentModalImg: "",
+      totalImages: 0,
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -53,10 +54,12 @@ class App extends React.Component<{}, AppInterface> {
       });
       const data = await fetchImages(this.state.searchQuery, this.state.page);
       if (data && data.data.hits.length) {
+        const totalHits = data.data.totalHits;
         const fetchedImages: ImageObject[] = data.data.hits;
         this.setState((prevState) => ({
           images: [...prevState.images, ...fetchedImages],
           fetching: false,
+          totalImages: totalHits,
         }));
       } else {
         Report.failure("No images found!", "Try typing something else", "Okay");
@@ -91,6 +94,7 @@ class App extends React.Component<{}, AppInterface> {
   }
 
   render() {
+    const shouldShowButton = this.state.totalImages - 12 * this.state.page > 0;
     return (
       <div className="App">
         <Searchbar handleSubmit={this.handleSubmit} />
@@ -99,7 +103,7 @@ class App extends React.Component<{}, AppInterface> {
           fetching={this.state.fetching}
           openModal={this.openModal}
         />
-        {this.state.images.length > 0 && <Button loadMore={this.loadMore} />}
+        {shouldShowButton && <Button loadMore={this.loadMore} />}
         <Loader visible={this.state.fetching} />
         {this.state.showModal && (
           <Modal
