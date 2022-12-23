@@ -2,6 +2,7 @@ export interface AppInterface {
   searchQuery: string;
   page: number;
   images: [] | ImageObject[];
+  fetching: boolean;
 }
 
 export interface ImageObject {

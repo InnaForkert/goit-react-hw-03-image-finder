@@ -2,7 +2,13 @@ import { ImageGalleryItem } from "../ImageGalleryItem/ImageGalleryItem";
 import { ImageObject } from "../utils/interfaces";
 import css from "./ImageGallery.module.css";
 
-export function ImageGallery({ images }: { images: ImageObject[] }) {
+export function ImageGallery({
+  images,
+  fetching,
+}: {
+  images: ImageObject[];
+  fetching: boolean;
+}) {
   return (
     <ul className={css.ImageGallery}>
       {images.length
@@ -14,6 +20,8 @@ export function ImageGallery({ images }: { images: ImageObject[] }) {
               alt={tags}
             />
           ))
+        : fetching
+        ? null
         : "Start searching!"}
     </ul>
   );

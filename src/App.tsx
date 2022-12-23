@@ -5,6 +5,8 @@ import { Searchbar } from "./Searchbar/Searchbar";
 import { ImageGallery } from "./ImageGallery/ImageGallery";
 import { AppInterface, ImageObject } from "./utils/interfaces";
 import { Button } from "./Button/Button";
+import { Loader } from "./Loader/Loader";
+import { Report } from "notiflix/build/notiflix-report-aio";
 
 class App extends React.Component<{}, AppInterface> {
   constructor(props: object) {
@@ -14,6 +16,7 @@ class App extends React.Component<{}, AppInterface> {
       searchQuery: "",
       page: 1,
       images: [],
+      fetching: false,
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -29,6 +32,7 @@ class App extends React.Component<{}, AppInterface> {
       this.setState({
         searchQuery: searchQuery,
         page: 1,
+        images: [],
       });
     }
   }
@@ -39,12 +43,21 @@ class App extends React.Component<{}, AppInterface> {
         prevState.searchQuery !== this.state.searchQuery) ||
       prevState.page !== this.state.page
     ) {
+      this.setState({
+        fetching: true,
+      });
       const data = await fetchImages(this.state.searchQuery, this.state.page);
-      if (data) {
+      if (data && data.data.hits.length) {
         const fetchedImages: ImageObject[] = data.data.hits;
         this.setState((prevState) => ({
           images: [...prevState.images, ...fetchedImages],
+          fetching: false,
         }));
+      } else {
+        Report.failure("No images found!", "Try typing something else", "Okay");
+        this.setState({
+          fetching: false,
+        });
       }
     }
   }
@@ -59,8 +72,12 @@ class App extends React.Component<{}, AppInterface> {
     return (
       <div className="App">
         <Searchbar handleSubmit={this.handleSubmit} />
-        <ImageGallery images={this.state.images} />
+        <ImageGallery
+          images={this.state.images}
+          fetching={this.state.fetching}
+        />
         {this.state.images.length > 0 && <Button loadMore={this.loadMore} />}
+        <Loader visible={this.state.fetching} />
       </div>
     );
   }
