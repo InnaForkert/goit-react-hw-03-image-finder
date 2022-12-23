@@ -1,13 +1,13 @@
 import css from "./Searchbar.module.css";
 
-interface SearchbarProps {
+export function Searchbar({
+  handleSubmit,
+}: {
   handleSubmit: React.FormEventHandler<HTMLFormElement>;
-}
-
-export function Searchbar(props: SearchbarProps) {
+}) {
   return (
     <header className={css.Searchbar}>
-      <form className={css.SearchForm} onSubmit={props.handleSubmit}>
+      <form className={css.SearchForm} onSubmit={handleSubmit}>
         <button type="submit" className={css["SearchForm-button"]}>
           <span className={css["SearchForm-button-label"]}>Search</span>
         </button>
