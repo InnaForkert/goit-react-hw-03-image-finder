@@ -1,7 +1,7 @@
 export interface AppInterface {
   searchQuery: string;
   page: number;
-  images: [];
+  images: [] | ImageObject[];
 }
 
 export interface ImageObject {
