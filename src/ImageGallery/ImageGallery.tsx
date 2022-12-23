@@ -1,3 +1,4 @@
+import React from "react";
 import { ImageGalleryItem } from "../ImageGalleryItem/ImageGalleryItem";
 import { ImageObject } from "../utils/interfaces";
 import css from "./ImageGallery.module.css";
@@ -9,7 +10,7 @@ export function ImageGallery({
 }: {
   images: ImageObject[];
   fetching: boolean;
-  openModal: (e: any) => void;
+  openModal: React.MouseEventHandler<HTMLElement>;
 }) {
   function handleOpenModal(e: React.MouseEvent<HTMLElement>) {
     openModal(e);

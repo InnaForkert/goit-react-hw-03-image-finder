@@ -73,7 +73,7 @@ class App extends React.Component<{}, AppInterface> {
     }));
   }
 
-  openModal(e: MouseEvent) {
+  openModal(e: React.MouseEvent) {
     const target = e.target as HTMLElement;
     if (target.dataset.largeimg) {
       this.setState({
