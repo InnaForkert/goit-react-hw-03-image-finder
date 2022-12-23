@@ -1,15 +1,16 @@
-import { ImageGalleryItem } from "../ImageGalleryItem/ImageGallery";
+import { ImageGalleryItem } from "../ImageGalleryItem/ImageGalleryItem";
 import { ImageObject } from "../utils/interfaces";
 
 export function ImageGallery({ images }: { images: ImageObject[] }) {
   return (
     <ul>
       {images.length &&
-        images.map(({ id, webformatURL, largeImageURL }) => (
+        images.map(({ id, webformatURL, largeImageURL, tags }) => (
           <ImageGalleryItem
             key={id}
             src={webformatURL}
-            data-largeImg={largeImageURL}
+            largeImg={largeImageURL}
+            alt={tags}
           />
         ))}
     </ul>
