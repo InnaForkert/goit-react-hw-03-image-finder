@@ -1,12 +1,14 @@
 import React from "react";
 import "./App.css";
+
 import { fetchImages } from "./utils/fetch";
+import { AppInterface, ImageObject } from "./utils/interfaces";
+import { Report } from "notiflix/build/notiflix-report-aio";
+
 import { Searchbar } from "./Searchbar/Searchbar";
 import { ImageGallery } from "./ImageGallery/ImageGallery";
-import { AppInterface, ImageObject } from "./utils/interfaces";
 import { Button } from "./Button/Button";
 import { Loader } from "./Loader/Loader";
-import { Report } from "notiflix/build/notiflix-report-aio";
 import { Modal } from "./Modal/Modal";
 
 class App extends React.Component<{}, AppInterface> {
@@ -31,9 +33,11 @@ class App extends React.Component<{}, AppInterface> {
 
   handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
     const target = e.target as HTMLFormElement;
     const query = target.elements[1] as HTMLInputElement;
     const searchQuery = query.value;
+
     if (searchQuery) {
       this.setState({
         searchQuery: searchQuery,
@@ -44,21 +48,22 @@ class App extends React.Component<{}, AppInterface> {
   }
 
   async componentDidUpdate(_: {}, prevState: AppInterface): Promise<void> {
-    if (
-      prevState.searchQuery !== this.state.searchQuery ||
-      prevState.page !== this.state.page
-    ) {
+    const { searchQuery, page } = this.state;
+
+    if (prevState.searchQuery !== searchQuery || prevState.page !== page) {
       this.setState({
         fetching: true,
       });
+
       try {
-        const data = await fetchImages(this.state.searchQuery, this.state.page);
+        const data = await fetchImages(searchQuery, page);
+
         if (data && data.data.hits.length) {
           const totalHits = data.data.totalHits;
           const fetchedImages: ImageObject[] = data.data.hits;
           this.setState((prevState) => ({
             images: [...prevState.images, ...fetchedImages],
-            showLoadMoreBtn: this.state.page < Math.ceil(totalHits / 12),
+            showLoadMoreBtn: page < Math.ceil(totalHits / 12),
           }));
         } else {
           Report.failure(
@@ -86,6 +91,7 @@ class App extends React.Component<{}, AppInterface> {
 
   openModal(e: React.MouseEvent) {
     const target = e.target as HTMLElement;
+
     if (target.dataset.largeimg) {
       this.setState({
         showModal: true,
