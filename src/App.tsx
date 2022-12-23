@@ -3,11 +3,7 @@ import "./App.css";
 import { fetchImages } from "./utils/fetch";
 import { Searchbar } from "./Searchbar/Searchbar";
 import { ImageGallery } from "./ImageGallery/ImageGallery";
-
-interface AppInterface {
-  searchQuery: string;
-  page: number;
-}
+import { AppInterface } from "./utils/interfaces";
 
 class App extends React.Component<{}, AppInterface> {
   constructor(props: object) {
@@ -16,8 +12,8 @@ class App extends React.Component<{}, AppInterface> {
     this.state = {
       searchQuery: "",
       page: 1,
+      images: [],
     };
-
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -34,15 +30,21 @@ class App extends React.Component<{}, AppInterface> {
   }
 
   async componentDidUpdate(): Promise<void> {
-    const data = await fetchImages(this.state.searchQuery, this.state.page);
-    console.log(data);
+    if (this.state.searchQuery) {
+      const data = await fetchImages(this.state.searchQuery, this.state.page);
+      if (data) {
+        this.setState({
+          images: data.data.hits,
+        });
+      }
+    }
   }
 
   render() {
     return (
       <div className="App">
         <Searchbar handleSubmit={this.handleSubmit} />
-        <ImageGallery />
+        <ImageGallery images={this.state.images} />
       </div>
     );
   }
