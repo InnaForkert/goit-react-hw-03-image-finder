@@ -18,9 +18,15 @@ export class Modal extends React.Component<
     }
   };
 
+  checkOverlay = (e: MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      this.props.closeModal();
+    }
+  };
+
   render() {
     return (
-      <div className={css.Overlay} onClick={() => this.props.closeModal()}>
+      <div className={css.Overlay} onClick={this.checkOverlay}>
         <div className={css.Modal}>
           <img src={this.props.src} alt="" />
         </div>
