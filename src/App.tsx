@@ -45,24 +45,32 @@ class App extends React.Component<{}, AppInterface> {
 
   async componentDidUpdate(_: {}, prevState: AppInterface): Promise<void> {
     if (
-      (this.state.searchQuery &&
-        prevState.searchQuery !== this.state.searchQuery) ||
+      prevState.searchQuery !== this.state.searchQuery ||
       prevState.page !== this.state.page
     ) {
       this.setState({
         fetching: true,
       });
-      const data = await fetchImages(this.state.searchQuery, this.state.page);
-      if (data && data.data.hits.length) {
-        const totalHits = data.data.totalHits;
-        const fetchedImages: ImageObject[] = data.data.hits;
-        this.setState((prevState) => ({
-          images: [...prevState.images, ...fetchedImages],
-          fetching: false,
-          totalImages: totalHits,
-        }));
-      } else {
-        Report.failure("No images found!", "Try typing something else", "Okay");
+      try {
+        const data = await fetchImages(this.state.searchQuery, this.state.page);
+        if (data && data.data.hits.length) {
+          const totalHits = data.data.totalHits;
+          const fetchedImages: ImageObject[] = data.data.hits;
+          this.setState((prevState) => ({
+            images: [...prevState.images, ...fetchedImages],
+            totalImages: totalHits,
+          }));
+        } else {
+          Report.failure(
+            "No images found!",
+            "Try typing something else",
+            "Okay"
+          );
+        }
+      } catch (err) {
+        Report.failure("Opps!", "Something went wrong", "Okay");
+        console.log(err);
+      } finally {
         this.setState({
           fetching: false,
         });
