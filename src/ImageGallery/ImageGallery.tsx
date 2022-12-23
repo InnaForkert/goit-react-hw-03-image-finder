@@ -9,9 +9,9 @@ export function ImageGallery({
 }: {
   images: ImageObject[];
   fetching: boolean;
-  openModal: (e: MouseEvent) => void;
+  openModal: (e: any) => void;
 }) {
-  function handleOpenModal(e: MouseEvent) {
+  function handleOpenModal(e: React.MouseEvent<HTMLElement>) {
     openModal(e);
   }
 

@@ -18,7 +18,7 @@ export class Modal extends React.Component<
     }
   };
 
-  checkOverlay = (e: MouseEvent) => {
+  checkOverlay = (e: React.MouseEvent<HTMLElement>) => {
     if (e.target === e.currentTarget) {
       this.props.closeModal();
     }
