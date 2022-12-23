@@ -1,10 +1,10 @@
 import React from "react";
 import css from "./Modal.module.css";
 
-export class Modal extends React.Component<
-  { src: string; closeModal: () => void },
-  {}
-> {
+export class Modal extends React.Component<{
+  src: string;
+  closeModal: () => void;
+}> {
   componentDidMount(): void {
     document.addEventListener("keydown", this.checkKey);
   }

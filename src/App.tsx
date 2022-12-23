@@ -20,7 +20,7 @@ class App extends React.Component<{}, AppInterface> {
       fetching: false,
       showModal: false,
       currentModalImg: "",
-      totalImages: 0,
+      showLoadMoreBtn: false,
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -58,7 +58,7 @@ class App extends React.Component<{}, AppInterface> {
           const fetchedImages: ImageObject[] = data.data.hits;
           this.setState((prevState) => ({
             images: [...prevState.images, ...fetchedImages],
-            totalImages: totalHits,
+            showLoadMoreBtn: this.state.page < Math.ceil(totalHits / 12),
           }));
         } else {
           Report.failure(
@@ -102,16 +102,15 @@ class App extends React.Component<{}, AppInterface> {
   }
 
   render() {
-    const shouldShowButton = this.state.totalImages - 12 * this.state.page > 0;
     return (
       <div className="App">
         <Searchbar handleSubmit={this.handleSubmit} />
-        <ImageGallery
-          images={this.state.images}
-          fetching={this.state.fetching}
-          openModal={this.openModal}
-        />
-        {shouldShowButton && <Button loadMore={this.loadMore} />}
+        {this.state.images.length > 0 ? (
+          <ImageGallery images={this.state.images} openModal={this.openModal} />
+        ) : (
+          <h1>Nothing here yet!</h1>
+        )}
+        {this.state.showLoadMoreBtn && <Button loadMore={this.loadMore} />}
         <Loader visible={this.state.fetching} />
         {this.state.showModal && (
           <Modal

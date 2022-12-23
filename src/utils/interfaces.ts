@@ -5,7 +5,7 @@ export interface AppInterface {
   fetching: boolean;
   showModal: boolean;
   currentModalImg: string;
-  totalImages: number;
+  showLoadMoreBtn: boolean;
 }
 
 export interface ImageObject {
