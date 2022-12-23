@@ -3,6 +3,8 @@ export interface AppInterface {
   page: number;
   images: [] | ImageObject[];
   fetching: boolean;
+  showModal: boolean;
+  currentModalImg: string;
 }
 
 export interface ImageObject {

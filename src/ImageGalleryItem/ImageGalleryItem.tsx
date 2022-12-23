@@ -11,6 +11,7 @@ export function ImageGalleryItem(props: {
         src={props.src}
         alt={props.alt}
         className={css["ImageGalleryItem-image"]}
+        data-largeimg={props.largeImg}
       />
     </li>
   );

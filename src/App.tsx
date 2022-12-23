@@ -7,6 +7,7 @@ import { AppInterface, ImageObject } from "./utils/interfaces";
 import { Button } from "./Button/Button";
 import { Loader } from "./Loader/Loader";
 import { Report } from "notiflix/build/notiflix-report-aio";
+import { Modal } from "./Modal/Modal";
 
 class App extends React.Component<{}, AppInterface> {
   constructor(props: object) {
@@ -17,10 +18,14 @@ class App extends React.Component<{}, AppInterface> {
       page: 1,
       images: [],
       fetching: false,
+      showModal: false,
+      currentModalImg: "",
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.loadMore = this.loadMore.bind(this);
+    this.openModal = this.openModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
   }
 
   handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -68,6 +73,23 @@ class App extends React.Component<{}, AppInterface> {
     }));
   }
 
+  openModal(e: MouseEvent) {
+    const target = e.target as HTMLElement;
+    if (target.dataset.largeimg) {
+      this.setState({
+        showModal: true,
+        currentModalImg: target.dataset.largeimg,
+      });
+    }
+  }
+
+  closeModal() {
+    this.setState({
+      showModal: false,
+      currentModalImg: "",
+    });
+  }
+
   render() {
     return (
       <div className="App">
@@ -75,9 +97,16 @@ class App extends React.Component<{}, AppInterface> {
         <ImageGallery
           images={this.state.images}
           fetching={this.state.fetching}
+          openModal={this.openModal}
         />
         {this.state.images.length > 0 && <Button loadMore={this.loadMore} />}
         <Loader visible={this.state.fetching} />
+        {this.state.showModal && (
+          <Modal
+            src={this.state.currentModalImg}
+            closeModal={this.closeModal}
+          />
+        )}
       </div>
     );
   }
